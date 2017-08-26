@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class analysis extends AppCompatActivity {
 
@@ -15,15 +17,24 @@ public class analysis extends AppCompatActivity {
 
     private class AskWatsonTask extends AsyncTask<String, Void, String>{
         @Override
-        protected Object clone() throws CloneNotSupportedException {
-            protected String doInBackground(String...textsToAnalyze){
-                System.out.println(editText.getText());
+        protected String doInBackground(String...textsToAnalyze){
+            System.out.println(editText.getText());
 
-                runOnUiThread(new Runnable()){
-                    
+            runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+                    textView.setText("What is happening inside a thread - we are running Watson");
                 }
-            }
+            });
+            sentiment = "Test sentiment";
+            System.out.println(sentiment);
+
+            return sentiment;
         }
+
+        @Override
+        protected void OnPostExecute(String result){
+            textView.setText("The Message sentiment is: " + result);
     }
 
     @Override
@@ -37,11 +48,15 @@ public class analysis extends AppCompatActivity {
         button = (Button) findViewById(R.id.button);
 
         //fire action when button is pressed
-        button.setOnClickListener(new View.OnClickListener()){
-            @override
-                    public void onClick(View v){
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
                 System.out.println("Logging into the console that the button pressed for the text: " + editText.getText());
                 textView.setText("displaying at UI the sentiment to be checked for: " + editText.getText());
+
+                AskWatsonTask task = new AskWatsonTask();
+                task.execute(new String[]{});
+
             }
         }
     }
